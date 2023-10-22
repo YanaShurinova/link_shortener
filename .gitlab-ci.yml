@@ -1,0 +1,17 @@
+default:
+  image: python:3.10-slim
+  before_script:
+    - pip install poetry
+    - poetry install
+    - source `poetry env info --path`/bin/activate 
+
+stages:
+  - test
+  - lint
+
+
+  
+Linter:
+  stage: lint
+  script:
+    - poetry run flake8 .

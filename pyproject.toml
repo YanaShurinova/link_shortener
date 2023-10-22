@@ -4,10 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Yana Shurinova <yana.shurinova009@gmail.com>"]
 readme = "README.md"
-packages = [{include = "shift_course"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+wemake-python-styleguide = "^0.18.0"
+fastapi = "^0.104.0"
+aiohttp = "^3.8.6"
+pytest = "^7.4.2"
 
 
 [build-system]
