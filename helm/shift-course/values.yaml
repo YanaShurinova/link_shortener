@@ -1,0 +1,71 @@
+# Default values for shift_course.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/shift-python/y2023/homeworks/shurinova-ya/course_project
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 24023
+
+ingress:
+  enabled: false
+
+resources: {}
+
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+app:
+  servicePort: 24023
+  probes:
+    livenessPath: /up
+    readinessPath: /ready
+  resources:
+    limits:
+      cpu: 300m
+      memory: 200 Mi
+    requests:
+      cpu: 300m
+      memory: 200 Mi
+
+  failureThreshold: 5
+  initialDelaySecond: 30
+  periodSeconds: 2
+  successThreshold: 2
