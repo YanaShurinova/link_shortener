@@ -9,7 +9,10 @@ stages:
   - test
   - lint
 
-
+Test:
+  stage: test
+  script:
+    - poetry run uvicorn src.app.main:app --port 24023 & poetry run pytest
   
 Linter:
   stage: lint
