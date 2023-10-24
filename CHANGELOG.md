@@ -74,3 +74,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Исправлено хранение исходной ссылки
  
 ### Fixed
+
+## [0.0.7] - 2023-10-24
+ 
+
+### Added
+- create_short_url_id
+- validate_url
+ 
+### Changed
+ 
+### Fixed
