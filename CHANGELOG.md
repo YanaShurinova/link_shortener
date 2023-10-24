@@ -41,3 +41,36 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
  
 ### Fixed
+
+## [0.0.4] - 2023-10-24
+ 
+ 
+### Added
+- /api/short_url
+- интеграционные тесты
+ 
+### Changed
+ 
+### Fixed
+
+## [0.0.5] - 2023-10-24
+ 
+
+### Added
+ 
+### Changed
+- /api/short_url
+ 
+### Fixed
+
+## [0.0.6] - 2023-10-24
+ 
+
+### Added
+- /{url_id}
+ 
+### Changed
+- /api/short_url -> /short
+Исправлено хранение исходной ссылки
+ 
+### Fixed
