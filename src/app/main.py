@@ -4,9 +4,11 @@ from contextlib import asynccontextmanager
 import uvicorn
 from aiohttp import ClientSession
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from starlette.status import HTTP_200_OK
 
 from src.app.crud import shorter_url
+from src.app.database import db_short_url
 from src.app.schemas import URL
 
 
@@ -27,20 +29,31 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.post('/api/short_url', response_model=URL)
-async def short_url(url: URL):
+@app.post('/short')
+async def short_url(url: URL) -> URL:
     """Хэндлер для запроса сокращения ссылки.
 
     Args:
         url (URL): исходная ссылка
 
     Returns:
-        json: новая сокращенная ссылка
+        URL: новая сокращенная ссылка
     """
-    new_url = await shorter_url(url)
-    return {
-        'url': new_url,
-    }
+    return await shorter_url(url)
+
+
+@app.get('/{url_id}')
+async def get_url(url_id: str) -> RedirectResponse:
+    """Переадресация.
+
+    Args:
+        url_id (str): ключ сокращенной ссылки
+
+    Returns:
+        RedirectResponse: переадресация
+    """
+    long_url = db_short_url.get(url_id)
+    return RedirectResponse(long_url.url)
 
 
 @app.get('/healthz/ready')

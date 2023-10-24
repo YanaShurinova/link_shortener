@@ -25,7 +25,7 @@ def test_main(url, expected):
         expected (_type_): код ошибки
     """
     response = client.post(
-        '/api/short_url',
+        '/short',
         json={
             'url': url,
         },
