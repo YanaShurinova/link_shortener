@@ -16,6 +16,10 @@ client = TestClient(app)
         'https://link.springer.com/article/10.1007/s11277-017-5224-x',
         200,
     ),
+    pytest.param(
+        'https://link.springer.com/article/10.1007/s11277-017-5224-x',
+        200,
+    ),
 ])
 def test_main(url, expected):
     """Тест основного эндпоинта.

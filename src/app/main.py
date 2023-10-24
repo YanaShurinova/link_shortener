@@ -53,7 +53,7 @@ async def get_url(url_id: str) -> RedirectResponse:
         RedirectResponse: переадресация
     """
     long_url = db_short_url.get(url_id)
-    return RedirectResponse(long_url.url)
+    return RedirectResponse(long_url)
 
 
 @app.get('/healthz/ready')
