@@ -85,3 +85,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
  
 ### Fixed
+
+## [0.0.8] - 2023-10-25
+ 
+
+### Added
+- src.app.database
+- src.app.config
+- src.app.model
+- helm/shift-course/templates/configmap.yaml
+ 
+### Changed
+- deployment.yaml
+### Fixed

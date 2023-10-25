@@ -11,6 +11,13 @@ stages:
 
 Test:
   stage: test
+  services:
+    - postgres
+  variables:
+    DB_NAME: shift
+    DB_LOGIN: postgres
+    DB_PASSWORD: 1234
+    POSTGRES_HOST_AUTH_METHOD: trust
   script:
     - poetry run uvicorn src.app.main:app --port 24023 & poetry run pytest
   
