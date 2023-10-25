@@ -42,6 +42,22 @@ spec:
             httpGet:
               path: /
               port: http
+          env:
+            - name: postgres_db
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB
+                  name: configmap
+            - name: postgres_user
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: configmap
+            - name: postgres_password
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: configmap
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

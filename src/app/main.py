@@ -5,11 +5,13 @@ import uvicorn
 from aiohttp import ClientSession
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from starlette.status import HTTP_200_OK
+from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
 from src.app.crud import shorter_url
-from src.app.database import db_short_url
+from src.app.database import DatabaseConnection, db_short_url
 from src.app.schemas import URL
+
+session_db = DatabaseConnection()
 
 
 @asynccontextmanager
@@ -67,7 +69,9 @@ async def ready():
     async with session.get('http://localhost:24023/healthz/up') as resp:
         status = resp.status
     if status == HTTP_200_OK:
-        return HTTP_200_OK
+        if session_db.get_session() is not None:
+            return HTTP_200_OK
+    return HTTP_500_INTERNAL_SERVER_ERROR
 
 
 @app.get('/healthz/up')
