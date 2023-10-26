@@ -13,8 +13,6 @@ from src.app.schemas import URLSchema
 
 session = DatabaseConnection().get_session()
 
-session_db = DatabaseConnection()
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
