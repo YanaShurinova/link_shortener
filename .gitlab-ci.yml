@@ -18,8 +18,10 @@ Test:
     DB_LOGIN: postgres
     DB_PASSWORD: 1234
     POSTGRES_HOST_AUTH_METHOD: trust
+  rules:
+    - if: $CI_COMMIT_BRANCH == "shift1064"
   script:
-    - poetry run uvicorn src.app.main:app --port 24023 & poetry run pytest
+    - poetry run uvicorn src.app.main:app --port 24023 & poetry run pytest --cov
   
 Linter:
   stage: lint

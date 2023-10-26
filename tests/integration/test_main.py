@@ -2,66 +2,57 @@
 import sys
 
 import pytest
-from fastapi.testclient import TestClient
+import pytest_asyncio
+from aiohttp import ClientSession
 
-from src.app.main import app
+from src.app.repositories.crud import URLRepository
+from src.app.schemas import URLSchema
 
 sys.path.append('C://Users//Яна//PycharmProjects//shift_course')
 
-client = TestClient(app)
 
-
-@pytest.mark.parametrize('url, expected', [
-    pytest.param(
-        'https://link.springer.com/article/10.1007/s11277-017-5224-x',
-        200,
-    ),
-    pytest.param(
-        'https://link.springer.com/article/10.1007/s11277-017-5224-x',
-        200,
-    ),
-])
-def test_main(url, expected):
-    """Тест основного эндпоинта.
+@pytest_asyncio.fixture
+async def repository(db_session):
+    """_summary_.
 
     Args:
-        url (_type_): исходный url
-        expected (_type_): код ошибки
+        db_session (_type_): _description_
+
+    Yields:
+        _type_: _description_
     """
-    response = client.post(
-        '/short',
-        json={
-            'url': url,
-        },
-    )
-    assert response.status_code == expected
+    yield URLRepository(db_session)
 
 
-@pytest.mark.parametrize('expected', [
-    pytest.param(200),
-])
-def test_ready(expected):
-    """Тест технического обработчика.
+@pytest_asyncio.fixture()
+async def create_short_url(repository):
+    """_summary_.
 
     Args:
-        expected (_type_): код ошибки
+        repository (_type_): _description_
+
+    Yields:
+        _type_: _description_
     """
-    response = client.get(
-        '/healthz/ready',
-    )
-    assert response.status_code == expected
+    url = URLSchema(url='https://learn.microsoft.com/ru-ru/samples/browse/')
+    yield await repository.shorter_url(url)
 
 
-@pytest.mark.parametrize('expected', [
-    pytest.param(200),
-])
-def test_up(expected):
-    """Тест технического обработчика.
+@pytest.mark.asyncio
+async def test_main(repository, db_session, create_short_url):
+    """_summary_.
 
     Args:
-        expected (_type_): код ошибки
+        repository (_type_): _description_
+        db_session (_type_): _description_
+        create_short_url (_type_): _description_
     """
-    response = client.get(
-        '/healthz/up',
-    )
-    assert response.status_code == expected
+    session_cl = ClientSession('http://localhost:24023')
+    async with session_cl.get('/healthz/ready') as resp:
+        status = resp.status
+    assert status == 200
+    async with session_cl.get('/healthz/up') as resp:  # noqa: WPS440
+        status = resp.status
+    assert status == 200
+    url_id = await repository.validate_url('https://learn.microsoft.com/ru-ru/samples/browse/')  # noqa: E501
+    assert url_id is not None

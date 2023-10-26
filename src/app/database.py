@@ -8,22 +8,22 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeMeta, declarative_base, sessionmaker
 
-from src.app.config import db_host, db_login, db_name, db_password, db_port
-
-db_short_url = {}
+from src.app.config import app_config
 
 Base: DeclarativeMeta = declarative_base()
 
 
-class DatabaseConnection:  # noqa: WPS306
+class DatabaseConnection:
     """Класс для подключения к БД."""
 
-    def __init__(self):
-        """_summary_."""
+    def __init__(self, config=app_config):
+        """_summary_.
+
+        Args:
+            config (_type_, optional): _description_. Defaults to app_config.
+        """
         _engine = create_async_engine(  # noqa: WPS122
-            url='postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}'.format(
-                db_login, db_password, db_host, db_port, db_name,
-            ),
+            url=config.postgres.uri,
         )
         async_session_factory = sessionmaker(
             _engine,  # noqa: WPS121
