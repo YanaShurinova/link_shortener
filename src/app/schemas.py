@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 
 
-class URL(BaseModel):
+class URLSchema(BaseModel):
     """Модель для ссылки.
 
     Args:

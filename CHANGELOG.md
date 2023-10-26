@@ -98,3 +98,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - deployment.yaml
 ### Fixed
+
+## [0.0.9] - 2023-10-26
+ 
+
+### Added
+- src.app.repositories
+- tests.unit
+ 
+### Changed
+- src.app.main
+- src.app.database
+- src.app.config
+- tests.integration
+### Fixed

@@ -1,10 +1,10 @@
 """Модель для бд."""
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, DateTime, String
 
 from src.app.database import Base
 
 
-class URL(Base):
+class URLModel(Base):
     """Таблица для бд.
 
     Args:
@@ -13,5 +13,6 @@ class URL(Base):
 
     __tablename__ = 'urls'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     target_url = Column(String, nullable=False)
+    expires = Column(DateTime, nullable=False)

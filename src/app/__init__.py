@@ -1,2 +1,2 @@
 from src.app.database import Base
-from src.app.model import URL
+from src.app.model import URLModel

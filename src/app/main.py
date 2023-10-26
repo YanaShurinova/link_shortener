@@ -7,9 +7,11 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
-from src.app.crud import shorter_url
-from src.app.database import DatabaseConnection, db_short_url
-from src.app.schemas import URL
+from src.app.database import DatabaseConnection
+from src.app.repositories.crud import URLRepository
+from src.app.schemas import URLSchema
+
+session = DatabaseConnection().get_session()
 
 session_db = DatabaseConnection()
 
@@ -24,24 +26,24 @@ async def lifespan(app: FastAPI):
     Yields:
         _type_: clien_session
     """
-    session = ClientSession()
-    yield {'client_session': session}
-    await session.close()
+    session_cl = ClientSession()
+    yield {'client_session': session_cl}
+    await session_cl.close()
 
 app = FastAPI(lifespan=lifespan)
 
 
 @app.post('/short')
-async def short_url(url: URL) -> URL:
+async def short_url(url: URLSchema) -> URLSchema:
     """Хэндлер для запроса сокращения ссылки.
 
     Args:
-        url (URL): исходная ссылка
+        url (URLSchema): исходная ссылка
 
     Returns:
-        URL: новая сокращенная ссылка
+        URLSchema: новая сокращенная ссылка
     """
-    return await shorter_url(url)
+    return await URLRepository(session).shorter_url(url)
 
 
 @app.get('/{url_id}')
@@ -54,7 +56,7 @@ async def get_url(url_id: str) -> RedirectResponse:
     Returns:
         RedirectResponse: переадресация
     """
-    long_url = db_short_url.get(url_id)
+    long_url = await URLRepository(session).get_url_by_id(url_id)
     return RedirectResponse(long_url)
 
 
@@ -65,11 +67,11 @@ async def ready():
     Returns:
         _type_: статус
     """
-    session = ClientSession(raise_for_status=True)
-    async with session.get('http://localhost:24023/healthz/up') as resp:
+    session_cl = ClientSession(raise_for_status=True)
+    async with session_cl.get('http://localhost:24023/healthz/up') as resp:
         status = resp.status
     if status == HTTP_200_OK:
-        if session_db.get_session() is not None:
+        if session is not None:
             return HTTP_200_OK
     return HTTP_500_INTERNAL_SERVER_ERROR
 
