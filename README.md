@@ -5,7 +5,7 @@
 При переходе по короткой ссылке в браузере должна открываться страница по длинной ссылке.
 
 ## Стек технологий:
-FastAPI, 
+FastAPI, pydantic
 PostgreSQL,
-sqlalchemy, alembic
+sqlalchemy, alembic,
 docker
